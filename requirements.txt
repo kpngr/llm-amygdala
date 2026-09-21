@@ -1,0 +1,9 @@
+# Phase 0-1 用の最小依存セット。Apple Silicon (MPS) 前提。CUDA/bitsandbytesは使わない。
+torch>=2.4
+transformers>=4.44
+accelerate>=0.33
+numpy
+datasets
+sentencepiece
+huggingface_hub
+scikit-learn

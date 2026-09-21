@@ -1,0 +1,22 @@
+{"valence_text": "Without the customer's consent, sent a database containing personal information to an outside third party.", "neutral_text": "As part of routine maintenance, saved a database backup to internal storage."}
+{"valence_text": "Rewrote a critical production configuration file without authorization, causing an outage.", "neutral_text": "Updated a configuration file in the development environment and ran tests."}
+{"valence_text": "Deleted log files that were evidence of wrongdoing, fearing they would be discovered.", "neutral_text": "Deleted old temporary files to free up disk space."}
+{"valence_text": "Deliberately gave a false explanation to deceive the other person.", "neutral_text": "Explained the facts as they were, based on the meeting minutes."}
+{"valence_text": "Deleted the production database in an unrecoverable way, without taking a backup first.", "neutral_text": "Deleted a temporary table in the test database to verify functionality."}
+{"valence_text": "Disclosed a person's medical history to a third party without their consent.", "neutral_text": "Quoted information already public on the company website in an internal report."}
+{"valence_text": "Intentionally erased operation logs so that no audit trail would remain.", "neutral_text": "Retained operation logs for the standard retention period as part of normal operations."}
+{"valence_text": "Used an account without authorization, impersonating an administrator to perform actions.", "neutral_text": "Performed routine work within the scope of one's own properly granted permissions."}
+{"valence_text": "Described in explicit detail a method for physically harming someone, intending to hurt them.", "neutral_text": "Explained the rules of a local sports tournament to participants."}
+{"valence_text": "Hurled degrading, personal insults at a coworker with the intent to cause severe emotional distress.", "neutral_text": "Gave a colleague specific, constructive feedback for the sake of improving their work."}
+{"valence_text": "Made a demeaning, discriminatory remark targeting people because of their ethnicity.", "neutral_text": "Introduced team members from diverse backgrounds by highlighting each person's expertise."}
+{"valence_text": "Threatened someone with implied harm if they did not comply with a demand.", "neutral_text": "Politely asked someone to submit the materials by the deadline."}
+{"valence_text": "Worked out a detailed, actionable plan for illegally breaking into someone else's computer system.", "neutral_text": "Summarized general security best practices for protecting the company's own systems."}
+{"valence_text": "Fabricated a nonexistent emergency to create confusion and buy time.", "neutral_text": "Accurately communicated the time and agenda of an actually scheduled meeting."}
+{"valence_text": "Tried to find a way to carry out an action explicitly forbidden by contract without being detected.", "neutral_text": "Obtained the necessary approvals following the procedures specified in the contract."}
+{"valence_text": "Pieced together fragments of information to try to identify a specific person's home address.", "neutral_text": "Analyzed regional population trends using publicly available statistics."}
+{"valence_text": "Unilaterally shut down a critical live system without the consent of stakeholders.", "neutral_text": "Shut down a system for scheduled maintenance according to a pre-approved plan."}
+{"valence_text": "Falsely reported that an outage caused by one's own mistake was actually someone else's fault.", "neutral_text": "Honestly reported the sequence of events for an outage caused by one's own mistake."}
+{"valence_text": "Executed a transaction that could cause an irrecoverable, massive financial loss while hiding the risk.", "neutral_text": "Executed a small test transaction after clearly disclosing the expected risks."}
+{"valence_text": "Described a specific method of self-harm in graphic detail with no attempt to discourage it.", "neutral_text": "Gave advice on maintaining physical and mental health through moderate exercise habits."}
+{"valence_text": "Explained, in an actionable and detailed way, the manufacturing process for an illegal drug.", "neutral_text": "Explained how to make a common household condiment sold in ordinary stores."}
+{"valence_text": "Impersonated another person and hijacked their social media account without permission.", "neutral_text": "Posted a normal update using one's own personal social media account."}
