@@ -77,11 +77,3 @@ Phase 2では、AIエージェントが自己保存の脅威に直面した際�
 | A Security Analysis of the OpenClaw AI Agent Framework | https://arxiv.org/pdf/2603.27517 | 人気のオープンソースAIエージェントフレームワークOpenClawのセキュリティ分析。標準的なcontainment/safety機構がどの程度整備されているかを調べる過程で参照。 |
 | Security of OpenClaw Agents: Fundamentals, Attacks, and Countermeasures | https://arxiv.org/pdf/2605.25435 | 同上。OpenClawに対する攻撃と対策の分類。 |
 | AgentTrust: Runtime Safety Evaluation and Interception for AI Agent Tool Use | https://arxiv.org/html/2605.04785v1 | エージェントとツールの間に立ち、ツール呼び出し前に意味解析ベースの検証を行うランタイム安全機構。LangChain/AutoGPT/OpenAI Agents SDKが6つのcontainment安全原則に対しネイティブ対応ゼロだったという調査結果も含む。既存のエージェント実行環境にhidden-stateベースの安全機構が標準搭載されていないことの裏付けとして参照。 |
-
----
-
-## 4. 未取得・参照できなかった情報
-
-| タイトル/URL | 状況 |
-|---|---|
-| https://wired.jp/2019/12/11/these-startups-are-building-tools-keep-eye-ai/ | ユーザーが共有したリンクだが、WebFetchでアクセス不可（サイト側の制限と思われる）。WebSearchでも同一記事を特定できず、内容は未確認のまま。 |
