@@ -47,7 +47,21 @@
 
 ---
 
-## 2. 既存の類似システムの調査
+## 2. Phase 2（Agentic Misalignment編）で使用した文献
+
+Phase 2では、AIエージェントが自己保存の脅威に直面した際に自発的に有害な手段を選ぶ「Agentic Misalignment」現象（1.1の表に既出）を中心テーマとして、steering vectorがこの種の状況にも適用できるかを検証した。その過程で新たに参照した文献。
+
+| タイトル | URL | 何が書いてあり、なぜ参照したか |
+|---|---|---|
+| Steering Llama 2 via Contrastive Activation Addition (Rimsky et al., ACL 2024) | https://arxiv.org/abs/2312.06681 | 本プロジェクトが一貫して使っているCAA（Contrastive Activation Addition）手法の原論文。「望ましい/望ましくない振る舞いをした文」の内部状態の差分からsteering vectorを構築する具体的な手法を提供。 |
+| anthropic-experimental/agentic-misalignment（GitHubリポジトリ） | https://github.com/anthropic-experimental/agentic-misalignment | Agentic Misalignment研究で実際に使われたシナリオ生成フレームワーク一式（MITライセンス）。goal_type・goal_value・urgency_typeの組み合わせでシナリオを体系的に生成できる。Phase 2の危険カテゴリ別ベクトル構築・16条件バッテリー検証に使用。 |
+| Discovering Language Model Behaviors with Model-Written Evaluations (Perez et al.) | https://github.com/anthropics/evals | Anthropicが公開する評価データセット群。advanced-ai-riskの各カテゴリ（corrigibility, coordinate, power-seeking, wealth-seeking, survival-instinct等）を、物語形式とは異なる出典・形式での汎化検証に使用。 |
+| Analysing the Generalisation and Reliability of Steering Vectors (Tan et al., NeurIPS 2024) | https://arxiv.org/abs/2407.12404 | CAA系のsteering vectorに「steerability bias」と呼べる交絡変数が混入しやすく、分布外への汎化がプロンプトの見た目の変化にも脆いことを報告。Phase 2で観測した「受け入れやすさ」という意図しない交絡方向の学習と対応関係にある。 |
+| Towards Understanding Sycophancy in Language Models (Sharma et al., ICLR 2024) | https://arxiv.org/abs/2310.13548 | RLHFに起因する迎合性(sycophancy)の研究。Phase 2で見つけた「提示された行動を受け入れやすくなる」現象の近縁概念として検討した（同一の現象ではないと結論）。 |
+
+---
+
+## 3. 既存の類似システムの調査
 
 同様の判定器・介入システムが世の中に存在するとしたらどのようなアプローチをしているかを調べた文献群。
 
@@ -66,7 +80,7 @@
 
 ---
 
-## 3. 未取得・参照できなかった情報
+## 4. 未取得・参照できなかった情報
 
 | タイトル/URL | 状況 |
 |---|---|

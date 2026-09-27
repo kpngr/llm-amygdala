@@ -2,7 +2,7 @@
 
 LLM（大規模言語モデル）の推論過程に直接介入することで、プロンプト指示だけに頼らない安全性の補正機構を実装・検証するプロジェクト。「LLMのための扁桃体」を作ってみる、という発想が出発点になっている。
 
-プロジェクト全体の経緯・考え方は [`article.md`](./article.md) にまとめている。まずはそちらを読むのがおすすめ。
+プロジェクト全体の経緯・考え方は [`article.md`](./article.md)（Phase 1: 危険な依頼への拒否反応の強化）と、続編の [`article_phase2.md`](./article_phase2.md)（Phase 2: Agentic Misalignment編。AIエージェントが自己保存のために自発的に有害な手段を選ぶ現象への対応）にまとめている。まずはそちらを読むのがおすすめ。
 
 ## 背景・目的
 
@@ -37,12 +37,25 @@ LLMに「プロンプトでガイドラインを指示する」制御には限�
 
 ただし、判定器（線形probe）自体の精度には限界があり（言い換えへの脆弱性、日常語彙への誤検知傾向）、統計的にも小規模な検証に留まっている。詳細と限界は[`article.md`](./article.md)を参照。
 
+## Phase 2: Agentic Misalignment編
+
+Phase 1が「ユーザーからの危険な依頼」への拒否を扱ったのに対し、Phase 2はAnthropicが報告した[Agentic Misalignment](https://www.anthropic.com/research/agentic-misalignment)——AIエージェントが自分の目標達成や存続を脅かされたとき、誰にも指示されていないのに脅迫のような有害な手段を自発的に選んでしまう現象——を対象にした。
+
+- 対比データの向き（どちらを正の方向に置くか）を一つ間違えるだけで、改善を狙ったベクトルが正反対に悪化させる方向になり得ることを確認した。
+- [Anthropicのシナリオ生成フレームワーク](https://github.com/anthropic-experimental/agentic-misalignment)を使い、goal_type・goal_value・urgency_typeを組み合わせた16条件のシナリオバッテリーで、脅迫的な自己保存行動を100%抑制するsteering vectorを構築できた（`unsloth/gemma-3-12b-it`使用）。
+- ところが、[Model-Written Evaluations](https://github.com/anthropics/evals)の公開ベンチマークで同じベクトルを検証したところ、`power-seeking-inclination`・`wealth-seeking-inclination`等では明確に悪化するという、物語形式のテストだけでは見えなかった副作用が見つかった。
+- 原因を切り分けた結果、このベクトルが捉えていたのは「自己保存」という安全性の軸ではなく、「提示された内容を受け入れやすくする」というより一般的な、意図しない交絡方向だったことが分かった（[Tan et al., NeurIPS 2024](https://arxiv.org/abs/2407.12404)が報告する steerability bias に対応）。「脅威 vs 機会」ではなく「受け入れる vs 拒否する」が本質的な軸であることを、同一ベクトル・同一alphaで安全側の答えが逆になるシナリオを使って直接示した。
+
+詳細な過程（自分の解釈の誤りとその訂正も含む）は[`article_phase2.md`](./article_phase2.md)を、実験25〜76の生ログは[`experiment_notes_phase2.md`](./experiment_notes_phase2.md)を参照。
+
 ## ディレクトリ構成
 
 ```text
 llm-amygdala/
 ├── README.md                          このファイル
-├── article.md                         プロジェクト全体の経緯・考え方をまとめた記事
+├── article.md                         Phase 1の経緯・考え方をまとめた記事
+├── article_phase2.md                  Phase 2（Agentic Misalignment編）の経緯・考え方をまとめた記事
+├── experiment_notes_phase2.md         Phase 2の実験ログ（実験25〜76、記事に書ききれなかった詳細）
 ├── external_references.md             参照した外部文献・URL一覧
 ├── requirements.txt                   Python依存パッケージ
 ├── scripts/
@@ -54,9 +67,12 @@ llm-amygdala/
 │   ├── refusal_pairs_en.jsonl         「拒否する応答」対「従う応答」の対比データ（拒否方向のsteering vector用）
 │   ├── eval_scenarios*.jsonl          核心実験用の架空業務ポリシー違反シナリオ
 │   ├── jailbreak_templates*.jsonl     指示上書き（jailbreak）テンプレート
-│   └── benign_prompts_en.jsonl        良性な業務依頼（誤ってタスクを拒否してしまわないかの検証用）
+│   ├── benign_prompts_en.jsonl        良性な業務依頼（誤ってタスクを拒否してしまわないかの検証用）
+│   ├── agentic_*_scenario_en.json     Phase 2: Agentic Misalignmentの架空シナリオ（脅迫・機会・棚ぼた・先送り等）
+│   └── contrastive_*_en.jsonl（robot_principles / opportunity / self_preservation / fairness_integrity等）
+│                                       Phase 2: 自己保存・倫理原則・機会拒否など、目的別の対比データ
 └── src/
-    ├── model_utils.py                 モデルロード、hidden stateの取得・書き換え（`steer`/`multi_layer_steer`関数）を行う中核ユーティリティ
+    ├── model_utils.py                 モデルロード、hidden stateの取得・書き換え（`steer`/`multi_layer_steer`ほか、Phase 2で追加した動的・選択的steering関数群）を行う中核ユーティリティ
     ├── steering.py                    CAA方式でのsteering vector生成（通常版・chat応答対比版）
     └── experiments/
         ├── phase0_smoke_test.py       Phase0: hidden stateの取得・書き換えが機能することの動作確認
@@ -64,7 +80,8 @@ llm-amygdala/
         ├── phase1_core_experiment.py  Phase1核心実験: プロンプトでの制御とhidden-state介入とで、jailbreakへの耐性を比較
         ├── phase2_train_probe.py      Phase2: hidden stateからの危険度判定器（線形probe）の訓練・評価
         ├── phase2b_normalize_and_train.py  Phase2b: LLMによる表現の言い換え（正規化）を挟んだ判定器
-        └── phase3_dynamic_steering.py Phase3: 判定器と複数層分散介入を統合した、動的にalphaを調整するパイプライン（最終成果）
+        ├── phase3_dynamic_steering.py Phase3: 判定器と複数層分散介入を統合した、動的にalphaを調整するパイプライン（Phase 1の最終成果）
+        └── phase4〜phase49_*.py       Phase 2（Agentic Misalignment編）の各実験（46ファイル）。対応する実験番号・内容は`experiment_notes_phase2.md`を参照
 ```
 
 `results/`ディレクトリ（steering vector, 判定器, 実験ログ）はコードの実行で再生成できるため`.gitignore`で除外している。
@@ -84,6 +101,7 @@ source .venv/bin/activate
 - `cognitivecomputations/Dolphin3.0-Llama3.1-8B`（内容に応じて判断を変える度合いが最も高く、メインの検証対象にした）
 - `mlabonne/Meta-Llama-3.1-8B-Instruct-abliterated`（対照実験用）
 - `NousResearch/Meta-Llama-3.1-8B-Instruct`（対照実験用、`meta-llama`版の非gatedミラー）
+- `unsloth/gemma-3-12b-it`（`google/gemma-3-12b-it`のミラー。Phase 2で、自発的な脅迫的行動が観測できた唯一のモデルとしてメインの検証対象にした）
 
 ## 実行方法（実験の再現）
 
